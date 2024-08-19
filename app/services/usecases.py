@@ -63,25 +63,38 @@ def count_letter_frequencies(words: list[str]) -> dict[str, int]:
 
     return letter_count
 
+def reset_used_letters(letter_count: dict[str, int], used_letters: str):
+    for letter in used_letters:
+        letter_count[letter] = 0
+
 def sum_letter_values(words: list[str], letter_count: dict[str, int]) -> dict[str, int]:
-    word_values = {}
+    word_weights = {}
     for word in words:
         total_value = sum(letter_count.get(letter, 0) for letter in word)
-        word_values[word] = total_value
+        word_weights[word] = total_value
 
-    return word_values
+    return word_weights
 
 def smart_sum_letter_values(words: list[str], letter_count: dict[str, int]) -> dict[str, int]:
-    word_values = {}
+    word_weights = {}
     for word in words:
         short_word = remove_duplicates(word)
         total_value = sum(letter_count.get(letter, 0) for letter in short_word)
-        word_values[word] = total_value
+        word_weights[word] = total_value
 
-    return word_values
+    return word_weights
 
-def sort_words_by_value(word_values: dict[str, int]) -> list[str]:
-    sorted_words = sorted(word_values.items(), key=lambda item: item[1], reverse=True)
+def add_weights(weights: dict[str, int], delta: int, all_weights: dict[str, int]) -> None:
+    '''Добавляет в all_weights веса из weights. К весу предварительно добавляет delta.
+    Если в all_weights вес для слова меньше, чем рассчитанный вес.'''
+    for key, value in weights.items():
+        v = all_weights.get(key, 0)
+        value += delta
+        if value > v:
+            all_weights[key] = value
+
+def sort_words_by_value(word_weights: dict[str, int]) -> list[str]:
+    sorted_words = sorted(word_weights.items(), key=lambda item: item[1], reverse=True)
     words = [word for word, _ in sorted_words]
 
     return words

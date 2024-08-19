@@ -1,7 +1,7 @@
 import pytest
 
 from app.models.attempt import Attempt
-from app.services.usecases import calc_mask, gen_patterns, remove_duplicates, smart_sum_letter_values, sum_letter_values
+from app.services.usecases import add_weights, calc_mask, gen_patterns, remove_duplicates, smart_sum_letter_values, sum_letter_values
 
 
 class TestUsecases:
@@ -48,9 +48,9 @@ class TestUsecases:
                         "н": 2, "б": 1, "с": 1,
                         "л": 1, "о": 2, "в": 1}
         words = ["аркан", "баран", "слово"]
-        expected_values = {"аркан": 13, "баран": 13, "слово": 7}
-        word_values = sum_letter_values(words, letter_count)
-        assert word_values == expected_values
+        expected_weights = {"аркан": 13, "баран": 13, "слово": 7}
+        word_weights = sum_letter_values(words, letter_count)
+        assert word_weights == expected_weights
 
     def test_remove_duplicates(self):
         word = "аркан"
@@ -63,10 +63,18 @@ class TestUsecases:
                         "н": 2, "б": 1, "с": 1,
                         "л": 1, "о": 2, "в": 1}
         words = ["аркан", "баран", "слово"]
-        expected_values = {"аркан": 9, "баран": 9, "слово": 5}
-        word_values = smart_sum_letter_values(words, letter_count)
-        assert word_values == expected_values
+        expected_weights = {"аркан": 9, "баран": 9, "слово": 5}
+        word_weights = smart_sum_letter_values(words, letter_count)
 
+        assert word_weights == expected_weights
+
+    def test_add_weights(self):
+        weights = {"аркан": 1, "баран": 0, "слово": 5}
+        all_weights = {"баран": 3, "слово": 1, "ласка": 2}
+        expected_weights = {"аркан": 2, "баран": 3, "слово": 6, "ласка": 2}
+        add_weights(weights, all_weights)
+
+        assert all_weights == expected_weights
                     
 if __name__ == '__main__':
     pytest.main()

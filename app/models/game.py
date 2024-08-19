@@ -33,10 +33,7 @@ class Game:
 
     def _input_mask(self) -> str:
         while True:
-            mask = input("Введите маску из пяти цифр (" + \
-                            "0 - нет такой буквы в слове, " + \
-                            "1 - есть на этом месте, " + \
-                            "2 - есть на другом месте): ")
+            mask = input("Введите маску из пяти цифр: ")
             if len(mask) != WL or not all(c in '012' for c in mask):
                 log("Ошибка: маска должна состоять из пяти цифр от 0 до 2.")
                 continue
